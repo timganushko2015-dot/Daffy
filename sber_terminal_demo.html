@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Терминал — демо</title>
+<style>
+:root{--green:#21a038;--dark:#087b2d;--pale:#eff9f0;--ink:#173321}
+*{box-sizing:border-box}body{margin:0;background:#e9f0eb;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:16px}
+.terminal{width:min(100%,420px);min-height:720px;background:#fff;border-radius:32px;box-shadow:0 18px 55px #14351e24;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.top{height:10px;background:linear-gradient(90deg,#009b3a,#5ac85a,#009b3a);background-size:200%;animation:shine 3s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
+header{padding:22px 24px 12px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.logo{width:38px;height:38px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:white;font-size:24px;font-weight:900;box-shadow:0 5px 14px #21a03844}
+.demo{font-size:10px;font-weight:800;letter-spacing:1px;color:#168532;background:#e8f7eb;border-radius:20px;padding:7px 9px}
+main{padding:20px 24px;flex:1;display:flex;flex-direction:column}
+h1{font-size:30px;line-height:1.12;letter-spacing:-1px;margin:10px 0 10px}
+.sub{color:#6c7c70;font-size:14px;line-height:1.5;margin:0 0 25px}
+.hero{background:linear-gradient(145deg,#f2fbf3,#e3f5e6);border:1px solid #d6efd9;border-radius:24px;padding:25px 20px;text-align:center;margin-bottom:22px;position:relative;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;border:1px solid #c5e8cc;border-radius:50%;width:190px;height:190px;left:50%;top:50%;transform:translate(-50%,-50%);animation:pulse 3s ease-out infinite}
+.hero:after{animation-delay:1.5s}
+@keyframes pulse{0%{opacity:.7;transform:translate(-50%,-50%) scale(.6)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+.hero-icon{position:relative;z-index:1;width:92px;height:92px;border-radius:28px;background:#fff;display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 8px 24px #237c3620;color:var(--green);font-size:44px}
+.hero strong{position:relative;z-index:1;display:block;font-size:17px;margin-bottom:5px}
+.hero small{position:relative;z-index:1;color:#6c7c70;font-size:12px}
+button{border:0;cursor:pointer;font:inherit;transition:transform .15s,filter .15s}button:active{transform:scale(.98)}
+.primary{width:100%;padding:18px;border-radius:16px;background:var(--green);color:white;font-weight:750;font-size:16px;box-shadow:0 8px 18px #21a03830}
+.primary:hover{filter:brightness(.96)}
+.secondary{width:100%;padding:15px;border-radius:15px;background:#f0f5f1;color:#2d5b39;font-weight:700;margin-top:10px}
+footer{padding:16px 24px 22px;text-align:center;color:#92a096;font-size:11px;border-top:1px solid #f0f3f0}
+.screen{display:none;flex-direction:column;flex:1}.screen.active{display:flex}
+.back{background:none;color:#4b7b57;font-weight:700;align-self:flex-start;padding:5px 0 14px}
+.label{font-size:13px;font-weight:700;margin:12px 0 8px;color:#526557}
+.amount-wrap{display:flex;align-items:center;border:2px solid #dce9de;border-radius:17px;padding:4px 16px;margin:4px 0 16px}
+.amount-wrap:focus-within{border-color:var(--green)}
+.amount-wrap input{width:100%;border:0;outline:0;font-size:36px;font-weight:750;min-width:0;color:var(--ink);padding:13px 0;background:transparent}
+.currency{font-size:23px;color:#728277;font-weight:650}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.quick button{background:#f0f7f1;color:#28783b;padding:12px 4px;border-radius:12px;font-size:14px;font-weight:700}
+.face-area{display:grid;place-items:center;min-height:245px;background:#f2faf3;border-radius:22px;margin:10px 0 20px;position:relative;overflow:hidden}
+.face-ring{width:160px;height:190px;border:2px solid #8bd69a;border-radius:48% 48% 44% 44%;position:relative;display:grid;place-items:center}
+.face{font-size:78px;filter:grayscale(1);opacity:.72}
+.scan{position:absolute;left:8px;right:8px;height:3px;background:#24a33f;box-shadow:0 0 15px #21a038;animation:scan 2s ease-in-out infinite}
+@keyframes scan{0%,100%{top:15px}50%{top:170px}}
+.count{font-size:48px;font-weight:800;letter-spacing:-2px;text-align:center;color:var(--green);margin:12px}
+.progress{height:7px;background:#e3eee5;border-radius:8px;overflow:hidden;margin:8px 0 18px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#169c36,#70d17b);border-radius:8px}
+.status{text-align:center;color:#68786c;font-size:14px;line-height:1.5}
+.success{display:none;text-align:center;flex:1;flex-direction:column;align-items:center;justify-content:center;padding-bottom:20px}
+.success.show{display:flex}
+.check{width:104px;height:104px;border-radius:50%;background:#e5f7e9;color:#159633;display:grid;place-items:center;font-size:55px;margin:15px auto 25px;animation:pop .45s cubic-bezier(.2,1.5,.5,1)}
+@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.paid{font-size:43px;font-weight:850;letter-spacing:-1.5px;margin:10px 0}
+.receipt{background:#f6faf6;border-radius:16px;padding:15px;width:100%;margin:20px 0;text-align:left;font-size:13px;color:#68786c}
+.receipt div{display:flex;justify-content:space-between;padding:7px 0}.receipt b{color:#213d29}
+.note{font-size:11px;color:#829087;text-align:center;line-height:1.4;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="terminal">
+<div class="top"></div>
+<header><div class="brand"><div class="logo">✓</div><span>Терминал оплаты</span></div><span class="demo">ДЕМО</span></header>
+<main>
+<section class="screen active" id="home">
+<h1>Оплата<br>быстро и удобно</h1>
+<p class="sub">Демонстрационный платёжный терминал с анимацией подтверждения лицом.</p>
+<div class="hero"><div class="hero-icon">⌁</div><strong>Готов к оплате</strong><small>Выберите действие, чтобы начать</small></div>
+<button class="primary" onclick="showAmount()">Оплатить <span>→</span></button>
+<p class="note">Только игровая симуляция. Реальные платежи не выполняются.</p>
+</section>
+<section class="screen" id="amount">
+<button class="back" onclick="showScreen('home')">← Назад</button>
+<h1>Введите сумму</h1><p class="sub">Укажите сумму демонстрационного платежа.</p>
+<div class="label">Сумма платежа</div>
+<div class="amount-wrap"><input id="amountInput" inputmode="decimal" type="number" min="1" max="999999" placeholder="0" value="150"><span class="currency">₽</span></div>
+<div class="quick"><button onclick="setAmount(100)">100 ₽</button><button onclick="setAmount(250)">250 ₽</button><button onclick="setAmount(500)">500 ₽</button></div>
+<button class="primary" onclick="startPayment()">Продолжить →</button>
+</section>
+<section class="screen" id="faceScreen">
+<button class="back" onclick="cancelPayment()">← Отмена</button>
+<h1 style="font-size:27px">Оплата лицом</h1><p class="sub">Посмотрите на экран. Идёт демонстрация распознавания.</p>
+<div class="face-area"><div class="face-ring"><div class="face">☺</div><div class="scan"></div></div></div>
+<div class="status" id="faceStatus">Подготовка к подтверждению оплаты…</div>
+<div class="count" id="count">10</div><div class="progress"><div class="bar" id="bar"></div></div>
+<p class="note">Это анимация интерфейса, камера и биометрия не используются.</p>
+</section>
+<section class="success" id="success">
+<div class="check">✓</div><div style="color:#178b32;font-weight:800">ОПЛАТА УСПЕШНА</div>
+<h1 style="font-size:29px;margin:12px 0 0">Платёж выполнен</h1><div class="paid" id="paidAmount">150 ₽</div>
+<p class="sub" style="margin:0;text-align:center">Демонстрационная операция завершена</p>
+<div class="receipt"><div><span>Статус</span><b>Успешно</b></div><div><span>Способ</span><b>Оплата лицом (демо)</b></div><div><span>Время обработки</span><b>10 секунд</b></div><div><span>Реальное списание</span><b>Нет</b></div></div>
+<button class="primary" onclick="resetTerminal()">Новая оплата</button>
+</section>
+</main>
+<footer>Учебная оболочка · Не является банковским терминалом</footer>
+</div>
+<script>
+let timer=null, remaining=10, paymentAmount=0;
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('success').classList.remove('show');if(id==='success'){document.getElementById('success').classList.add('show')}else{document.getElementById(id).classList.add('active')}}
+function showAmount(){showScreen('amount');document.getElementById('amountInput').focus()}
+function setAmount(n){document.getElementById('amountInput').value=n}
+function startPayment(){
+ const raw=String(document.getElementById('amountInput').value).replace(',','.');
+ const n=Number(raw);
+ if(!Number.isFinite(n)||n<=0||n>999999){alert('Введите сумму от 1 до 999 999 ₽');return}
+ paymentAmount=n;remaining=10;document.getElementById('count').textContent=remaining;document.getElementById('bar').style.width='0%';document.getElementById('faceStatus').textContent='Подготовка к подтверждению оплаты…';showScreen('faceScreen');
+ clearInterval(timer);let elapsed=0;
+ timer=setInterval(()=>{elapsed++;remaining=10-elapsed;document.getElementById('count').textContent=Math.max(0,remaining);document.getElementById('bar').style.width=(elapsed*10)+'%';
+ if(elapsed===2)document.getElementById('faceStatus').textContent='Проверка положения лица…';
+ if(elapsed===5)document.getElementById('faceStatus').textContent='Подтверждение демонстрационного платежа…';
+ if(elapsed===8)document.getElementById('faceStatus').textContent='Завершение операции…';
+ if(elapsed>=10){clearInterval(timer);document.getElementById('paidAmount').textContent=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(paymentAmount)+' ₽';showScreen('success')}
+ },1000)
+}
+function cancelPayment(){clearInterval(timer);showScreen('amount')}
+function resetTerminal(){clearInterval(timer);document.getElementById('amountInput').value='150';showScreen('home')}
+</script>
+</body>
+</html>
